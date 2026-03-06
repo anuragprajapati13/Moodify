@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Moodify DJ Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- VIDEO BACKGROUND -->
+  <video autoplay muted loop playsinline id="bgVideo">
+    <source src="panda-dj.mp4" type="video/mp4">
+  </video>
+
+  <!-- DARK OVERLAY -->
+  <div class="overlay"></div>
+
+  <!-- LOGIN CARD -->
+  <div class="login-container">
+    <img src="logo2.png" alt="Moodify logo" class="logo">
+
+    <div class="input-row">
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+    </div>
+
+    <p class="forgot-link"><a href="reset.html">Forgot Password? Delete Account</a></p>
+
+    <button id="loginBtn">Start The Vibe 🎵</button>
+    <p id="loginError" class="login-error" style="display:none;color:#ff5252;margin-top:8px;"></p>
+
+    <p class="signup-link">
+      Don't have an account?
+      <a href="signup.html">Create One 🎧</a>
+    </p>
+  </div>
+
+  <!-- audio elements removed: mp3 files are empty/placeholder -->
+
+  <script src="script.js"></script>
+</body>
+</html>

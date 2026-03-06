@@ -1,0 +1,10 @@
+{
+    "faahSound.cooldownMs": 0,
+    "faahSound.enabled": false,
+    "faahSound.playOnDebugFailure": false,
+    "faahSound.playOnDiagnosticsError": false,
+    "faahSound.playOnOutputChannelError": false,
+    "faahSound.playOnTaskFailure": false,
+    "faahSound.playOnTerminalCommandFailure": false,
+    "faahSound.soundFile": ""
+}

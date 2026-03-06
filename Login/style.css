@@ -1,0 +1,640 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Audiowide', sans-serif;
+}
+
+/* VIDEO */
+#bgVideo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+    z-index: -2;
+
+    object-fit: contain;   /* IMPORTANT */
+    background: black;
+}
+
+/* OVERLAY */
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, #00000040, #000000cc);
+}
+
+/* LOGIN CARD */
+.login-container {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 580px;
+  height: auto;
+  padding: 35px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(25px);
+  border-radius: 20px;
+  text-align: center;
+  color: white;
+  box-shadow: 
+    0 0 40px #ff00ff,
+    0 20px 30px rgba(0, 240, 255, 0.6),
+    inset 0 -1px 0 rgba(0, 240, 255, 0.8);
+  transition: 1s ease;
+}
+
+/* NEW HORIZONTAL INPUT ROW */
+.input-row {
+    display: flex;
+    gap: 15px;
+    margin: 16px 0 14px 0;
+}
+
+.input-row input {
+    flex: 1;
+    padding: 14px 16px;
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    border-radius: 12px;
+    background: rgba(100, 50, 150, 0.2);
+    color: white;
+    font-size: 14px;
+    font-family: 'Audiowide', sans-serif;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.input-row input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.input-row input:focus {
+    outline: none;
+    border-color: rgba(255, 0, 255, 0.8);
+    background: rgba(150, 50, 200, 0.3);
+    box-shadow: 
+      0 0 20px rgba(255, 0, 255, 0.4),
+      inset 0 0 15px rgba(0, 240, 255, 0.1);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(45deg,#ff00ff,#00f0ff);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #00f0ff;
+}
+
+/* FORGOT PASSWORD LINK */
+.forgot-link {
+  margin: 8px 0 0 0;
+  font-size: 12px;
+  text-align: right;
+}
+
+/* reset form OR divider */
+.or-divider {
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  padding: 6px 0;
+}
+
+.forgot-link a {
+  color: #00f0ff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.forgot-link a:hover {
+  color: #ff00ff;
+}
+
+
+.signup-link a {
+  color: #00f0ff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.signup-link a:hover {
+  color: #ff00ff;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
+}
+
+/* EQUALIZER */
+.login-container h2{
+  font-family: 'Audiowide', sans-serif;
+  font-size: 34px;
+  margin: 0 0 10px 0;
+  letter-spacing: 1px;
+  display: inline-block;
+  position: relative;
+  top: -8px; /* move heading up a bit */
+}
+
+.wave-letter{
+  display: inline-block;
+  transform-origin: 50% 70%;
+  will-change: transform;
+}
+
+.wave-letter.idle{
+  animation: idleWave 2.4s infinite linear;
+}
+
+@keyframes idleWave{
+  0%{ transform: translateY(0); }
+  50%{ transform: translateY(-6px); }
+  100%{ transform: translateY(0); }
+}
+
+.equalizer {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* logo styling: position at top center and stretch */
+.login-container .logo{
+  display: block;
+  width: 160%;
+  max-width: 540px;
+  height: 70px;
+  margin: -35px auto 14px auto;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  background: transparent;
+}
+
+@media (max-width: 520px){
+  .login-container .logo{ height:48px; }
+}
+
+.equalizer span {
+  width: 6px;
+  height: 20px;
+  background: #ff00ff;
+  animation: equalize 1s infinite ease-in-out;
+}
+
+.equalizer span:nth-child(2){animation-delay:0.2s;}
+.equalizer span:nth-child(3){animation-delay:0.4s;}
+.equalizer span:nth-child(4){animation-delay:0.6s;}
+.equalizer span:nth-child(5){animation-delay:0.8s;}
+
+@keyframes equalize {
+  0%,100% { height:15px; }
+  50% { height:60px; }
+}
+
+@keyframes fadeIn {
+  from { opacity:0; transform: translate(-50%, -40%); }
+  to { opacity:1; transform: translate(-50%, -50%); }
+}
+
+/* ===== SIGNUP PAGE STYLES ===== */
+
+/* SIGNUP CARD - Glassmorphism */
+.signup-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 420px;
+  max-height: 85vh;
+  padding: 40px 35px;
+  background: rgba(15, 10, 30, 0.75);
+  backdrop-filter: blur(30px);
+  border: 1.5px solid rgba(255, 0, 255, 0.3);
+  border-radius: 25px;
+  text-align: center;
+  color: white;
+  box-shadow: 
+    0 0 60px rgba(255, 0, 255, 0.4),
+    inset 0 0 30px rgba(0, 240, 255, 0.1);
+  animation: signupFadeIn 0.6s ease-out;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 0, 255, 0.5) transparent;
+}
+
+.signup-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.signup-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.signup-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 0, 255, 0.5);
+  border-radius: 3px;
+}
+
+/* SIGNUP LOGO */
+.signup-container .logo {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: 60px;
+  margin: 0 auto 20px auto;
+  object-fit: contain;
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+}
+
+/* SIGNUP HEADING */
+.signup-container h2 {
+  font-family: 'Audiowide', sans-serif;
+  font-size: 28px;
+  margin: 0 0 28px 0;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #ff00ff, #00f0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+}
+
+/* RESET PASSWORD CARD */
+.reset-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 420px;
+  max-height: 85vh;
+  padding: 40px 35px;
+  background: rgba(15, 10, 30, 0.75);
+  backdrop-filter: blur(30px);
+  border: 1.5px solid rgba(255, 0, 255, 0.3);
+  border-radius: 25px;
+  text-align: center;
+  color: white;
+  box-shadow: 
+    0 0 60px rgba(255, 0, 255, 0.4),
+    inset 0 0 30px rgba(0, 240, 255, 0.1);
+  animation: signupFadeIn 0.6s ease-out;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 0, 255, 0.5) transparent;
+}
+
+.reset-container h2 {
+  font-family: 'Audiowide', sans-serif;
+  font-size: 28px;
+  margin: 0 0 10px 0;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #ff00ff, #00f0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+}
+
+/* FORM GROUP */
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  border-radius: 12px;
+  background: rgba(100, 50, 150, 0.2);
+  color: white;
+  font-size: 13px;
+  font-family: 'Audiowide', sans-serif;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: rgba(255, 0, 255, 0.8);
+  background: rgba(150, 50, 200, 0.3);
+  box-shadow: 
+    0 0 20px rgba(255, 0, 255, 0.4),
+    inset 0 0 15px rgba(0, 240, 255, 0.1);
+}
+
+/* PASSWORD HINT ICON & TOOLTIP */
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 70px;
+}
+
+/* PASSWORD TOGGLE EYE ICON */
+.password-toggle {
+  position: absolute;
+  right: 36px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: rgba(0, 240, 255, 0.7);
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
+  transition: color 0.3s;
+}
+
+.password-toggle:hover {
+  color: #ff00ff;
+}
+
+.password-toggle.active {
+  color: #ff00ff;
+}
+
+.password-hint-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: rgba(0, 240, 255, 0.7);
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
+}
+
+.password-hint-icon:hover,
+.password-hint-icon:focus {
+  color: #ff00ff;
+}
+
+.password-hint-tooltip {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 130%;
+  width: 260px;
+  padding: 12px 14px;
+  background: rgba(15, 10, 40, 0.95);
+  border: 1px solid rgba(255, 0, 255, 0.5);
+  border-radius: 10px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+  z-index: 100;
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+  pointer-events: none;
+}
+
+.password-hint-icon:hover .password-hint-tooltip,
+.password-hint-icon:focus .password-hint-tooltip {
+  display: block;
+}
+
+/* EMAIL WRAPPER WITH @gmail.com SUFFIX */
+.email-wrapper {
+  position: relative;
+}
+
+.email-suffix {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: rgba(0, 240, 255, 0.5);
+  pointer-events: none;
+  font-family: 'Audiowide', sans-serif;
+}
+
+.email-wrapper input {
+  padding-right: 100px;
+}
+
+/* USERNAME SUGGESTIONS */
+.username-wrapper {
+  position: relative;
+}
+
+.username-suggestions {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(15, 10, 40, 0.95);
+  border: 1px solid rgba(255, 0, 255, 0.4);
+  border-radius: 0 0 10px 10px;
+  z-index: 100;
+  max-height: 150px;
+  overflow-y: auto;
+  box-shadow: 0 8px 20px rgba(255, 0, 255, 0.2);
+}
+
+.username-suggestions.show {
+  display: block;
+}
+
+.username-suggestion-item {
+  padding: 8px 14px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-family: 'Audiowide', sans-serif;
+  transition: background 0.2s;
+}
+
+.username-suggestion-item:hover {
+  background: rgba(255, 0, 255, 0.2);
+  color: #00f0ff;
+}
+
+/* SIGNUP BUTTON */
+.signup-container button {
+  width: 100%;
+  padding: 14px 20px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff00ff, #00f0ff);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  font-family: 'Audiowide', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+  letter-spacing: 1px;
+}
+
+.signup-container button:hover {
+  transform: scale(1.02);
+  box-shadow: 
+    0 0 50px rgba(255, 0, 255, 0.7),
+    0 0 30px rgba(0, 240, 255, 0.6);
+}
+
+.signup-container button:active {
+  transform: scale(0.98);
+}
+
+/* SIGNUP EQUALIZER */
+.signup-equalizer {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.signup-equalizer span {
+  width: 8px;
+  height: 15px;
+  background: linear-gradient(to top, #ff00ff, #00f0ff);
+  border-radius: 2px;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+  animation: equalize 1s infinite ease-in-out;
+}
+
+.signup-equalizer span:nth-child(1) { animation-delay: 0s; }
+.signup-equalizer span:nth-child(2) { animation-delay: 0.15s; }
+.signup-equalizer span:nth-child(3) { animation-delay: 0.3s; }
+.signup-equalizer span:nth-child(4) { animation-delay: 0.15s; }
+.signup-equalizer span:nth-child(5) { animation-delay: 0s; }
+
+/* LOGIN LINK */
+.signup-container .login-link {
+  margin: 0;
+  padding-top: 12px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  border-top: 1px solid rgba(255, 0, 255, 0.2);
+}
+
+.signup-container .login-link a {
+  color: #00f0ff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.signup-container .login-link a:hover {
+  color: #ff00ff;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
+}
+
+/* ANIMATION */
+@keyframes signupFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  .signup-container {
+    width: 90vw;
+    max-width: 380px;
+    padding: 30px 25px;
+  }
+
+  .signup-container h2 {
+    font-size: 24px;
+  }
+
+  .form-group input {
+    padding: 12px 14px;
+    font-size: 12px;
+  }
+}
+
+/* ===== RESET PAGE STYLES ===== */
+.reset-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 420px;
+  max-height: 85vh;
+  padding: 40px 35px;
+  background: rgba(15, 10, 30, 0.75);
+  backdrop-filter: blur(30px);
+  border: 1.5px solid rgba(255, 0, 255, 0.3);
+  border-radius: 25px;
+  text-align: center;
+  color: white;
+  box-shadow: 
+    0 0 60px rgba(255, 0, 255, 0.4),
+    inset 0 0 30px rgba(0, 240, 255, 0.1);
+  animation: signupFadeIn 0.6s ease-out;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 0, 255, 0.5) transparent;
+}
+
+.reset-container h2 {
+  font-family: 'Audiowide', sans-serif;
+  font-size: 28px;
+  margin: 0 0 10px 0;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #ff00ff, #00f0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+}
+
+/* Delete Account Info Text */
+.delete-info {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+/* Signup link on delete page */
+.reset-container .signup-link {
+  margin-top: 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.reset-container .signup-link a {
+  color: #00f0ff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.reset-container .signup-link a:hover {
+  text-decoration: underline;
+  color: #ff00ff;
+}
+
+

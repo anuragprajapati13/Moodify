@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Delete Account - Moodify</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- VIDEO BACKGROUND -->
+  <video autoplay muted loop playsinline id="bgVideo">
+    <source src="panda-dj.mp4" type="video/mp4">
+  </video>
+  <div class="overlay"></div>
+
+  <div class="reset-container" id="deleteBox">
+    <img src="logo2.png" alt="Moodify logo" class="logo">
+    <h2>Delete Account</h2>
+    <p class="delete-info">Forgot your password? Delete your account and create a new one.</p>
+
+    <form id="deleteAccountForm">
+      <div class="form-group" id="emailGroup">
+        <input type="email" id="deleteEmail" placeholder="Enter your email">
+      </div>
+      <div class="form-group or-divider">or</div>
+      <div class="form-group" id="mobileGroup">
+        <input type="tel" id="deleteMobile" placeholder="Enter your mobile number">
+      </div>
+
+      <button type="submit" id="deleteBtn">Delete Account</button>
+    </form>
+
+    <p class="login-link">Remembered? <a href="index.html">Login</a></p>
+    <p class="signup-link">Create a new account? <a href="signup.html">Sign Up 🎧</a></p>
+  </div>
+
+  <audio id="clickSound" src="click.mp3"></audio>
+  <script src="script.js"></script>
+</body>
+</html>

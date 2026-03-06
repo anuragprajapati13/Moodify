@@ -1,0 +1,990 @@
+/* ===============================
+   GLOBAL
+================================ */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  overflow-x: hidden;
+  background: #121212;
+  transition: background 0.6s ease-in-out;
+  
+}
+
+/* ===============================
+   DIAGONAL MOOD BACKGROUNDS
+================================ */
+body.happy { background: linear-gradient(135deg, #1DB954, #0f2027); }
+body.sad { background: linear-gradient(135deg, #141E30, #243B55); }
+body.study { background: linear-gradient(135deg, #0F2027, #2C5364); }
+body.workout { background: linear-gradient(135deg, #8E0E00, #1F1C18); }
+body.romantic { background: linear-gradient(135deg, #ff1744, #880e4f); }
+body.chill { background: linear-gradient(135deg, #00bcd4, #006064); }
+body.party { background: linear-gradient(135deg, #9c27b0, #4a148c); }
+body.rainy { background: linear-gradient(135deg, #455a64, #37474f); }
+body.latenight { background: linear-gradient(135deg, #1a1a2e, #16213e); }
+body.motivation { background: linear-gradient(135deg, #ff6f00, #e65100); }
+body.angry { background: linear-gradient(135deg, #d32f2f, #b71c1c); }
+body.relax { background: linear-gradient(135deg, #4caf50, #2e7d32); }
+body.roadtrip { background: linear-gradient(135deg, #ff9800, #e65100); }
+body.lofi { background: linear-gradient(135deg, #b39ddb, #7e57c2); }
+body.celebration { background: linear-gradient(135deg, #ffd54f, #fbc02d); }
+body.heartbreak { background: linear-gradient(135deg, #e91e63, #880e4f); }
+body.dance { background: linear-gradient(135deg, #ff5722, #d84315); }
+body.morning { background: linear-gradient(135deg, #81c784, #388e3c); }
+body.rock { background: linear-gradient(135deg, #424242, #212121); }
+
+/* ===============================
+   ANIMATED RADIAL GLOW
+================================ */
+body::before {
+  content: "";
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  animation: moveGradient 18s linear infinite;
+  z-index: -3;
+}
+
+/* ensure player sits above the animated gradient */
+.player {
+  z-index: 1001;
+}
+
+@keyframes moveGradient {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* ===============================
+   LAYOUT
+================================ */
+.container {
+  display: flex;
+  margin-top: 56px; /* offset for fixed navbar */
+}
+
+.sidebar {
+  width: 220px;
+  /* let sidebar follow body background and expand as needed */
+  background: inherit;
+  background-color: black;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* Logo as main heading */
+.sidebar .logo-heading {
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.sidebar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.6rem;
+  user-select: none;
+}
+
+.sidebar-brand .brand-text {
+  font-family: 'Righteous', cursive;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, #1DB954, #1ed760, #a0f0c0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+}
+
+.sidebar h2 {
+  color: #1DB954;
+}
+
+.sidebar button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background: #181818;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+#toggleMoreBtn {
+  margin-top: 12px;
+}
+
+/* ensure extra moods look identical to main list */
+#moreMoods button,
+#moreMoods button:active,
+#moreMoods button.active {
+  background: #181818;
+  color: white;
+}
+
+/* when an extra mood is selected, highlight matches other active buttons */
+#moreMoods button.active {
+  background: #1DB954;
+  color: black;
+}
+
+.sidebar button:hover {
+  transform: scale(1.05);
+}
+
+.sidebar button.active {
+  background: #1DB954;
+  color: black;
+  transform: scale(1.08);
+}
+
+.main {
+  flex: 1;
+  padding: 20px;
+}
+
+/* ===============================
+   GLASS BANNER
+================================ */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(18px);
+  border-radius: 15px;
+}
+
+.banner {
+  padding: 40px;
+  margin-bottom: 20px;
+}
+
+#moodTitle {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+#search {
+  padding: 10px;
+  width: 100%;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+}
+
+/* ===============================
+   SONG GRID
+================================ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background: #181818;
+  padding: 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+body.happy .card:hover { box-shadow: 0 0 20px #1DB95488; }
+body.sad .card:hover { box-shadow: 0 0 20px #4e73df88; }
+body.study .card:hover { box-shadow: 0 0 20px #2C536488; }
+body.workout .card:hover { box-shadow: 0 0 20px #ff416c88; }
+body.romantic .card:hover { box-shadow: 0 0 20px #ff174488; }
+body.chill .card:hover { box-shadow: 0 0 20px #00bcd488; }
+body.party .card:hover { box-shadow: 0 0 20px #9c27b088; }
+body.rainy .card:hover { box-shadow: 0 0 20px #455a6488; }
+body.latenight .card:hover { box-shadow: 0 0 20px #1a1a2e88; }
+body.motivation .card:hover { box-shadow: 0 0 20px #ff6f0088; }
+body.angry .card:hover { box-shadow: 0 0 20px #d32f2f88; }
+body.relax .card:hover { box-shadow: 0 0 20px #4caf5088; }
+body.roadtrip .card:hover { box-shadow: 0 0 20px #ff980088; }
+body.lofi .card:hover { box-shadow: 0 0 20px #b39ddb88; }
+body.celebration .card:hover { box-shadow: 0 0 20px #ffd54f88; }
+body.heartbreak .card:hover { box-shadow: 0 0 20px #e91e6388; }
+body.dance .card:hover { box-shadow: 0 0 20px #ff572288; }
+body.morning .card:hover { box-shadow: 0 0 20px #81c78488; }
+body.rock .card:hover { box-shadow: 0 0 20px #42424288; }
+
+/* ===============================
+   PLAYER
+================================ */
+.player {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 15px 30px;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  backdrop-filter: blur(20px);
+}
+
+/* LEFT */
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* CENTER */
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* RIGHT SECTION FIX */
+.right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  position: relative;
+  z-index: 2000;   /* bring above video */
+}
+/* CONTROLS */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ===============================
+   CONTROL BUTTONS
+================================ */
+.control-btn {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: white;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.control-btn:hover {
+  transform: scale(1.1);
+}
+
+.play-btn {
+  font-size: 20px;
+  padding: 10px 16px;
+}
+
+.control-btn svg {
+  display: block;
+  pointer-events: none;
+}
+
+.active-mode {
+  background: #1DB954 !important;
+  color: black !important;
+}
+
+/* ===============================
+   TIMELINE / DURATION BAR
+================================ */
+.timeline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 8px;
+}
+
+.time-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  min-width: 36px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+.timeline-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: height 0.15s;
+}
+
+.timeline-bar:hover {
+  height: 6px;
+}
+
+.timeline-progress {
+  height: 100%;
+  width: 0%;
+  background: #1DB954;
+  border-radius: 4px;
+  pointer-events: none;
+  transition: width 0.1s linear;
+}
+
+.timeline-thumb {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+
+.timeline-bar:hover .timeline-thumb {
+  opacity: 1;
+}
+
+/* mood-specific timeline colors */
+body.happy .timeline-progress { background: #1DB954; }
+body.sad .timeline-progress { background: #4e73df; }
+body.study .timeline-progress { background: #2C5364; }
+body.workout .timeline-progress { background: #ff416c; }
+body.romantic .timeline-progress { background: #ff1744; }
+body.chill .timeline-progress { background: #00bcd4; }
+body.party .timeline-progress { background: #9c27b0; }
+body.rainy .timeline-progress { background: #455a64; }
+body.latenight .timeline-progress { background: #7c4dff; }
+body.motivation .timeline-progress { background: #ff6f00; }
+body.angry .timeline-progress { background: #d32f2f; }
+body.relax .timeline-progress { background: #4caf50; }
+body.roadtrip .timeline-progress { background: #ff9800; }
+body.lofi .timeline-progress { background: #b39ddb; }
+body.celebration .timeline-progress { background: #ffd54f; }
+body.heartbreak .timeline-progress { background: #e91e63; }
+body.dance .timeline-progress { background: #ff5722; }
+body.morning .timeline-progress { background: #81c784; }
+body.rock .timeline-progress { background: #424242; }
+
+/* ===============================
+   PROGRESS BAR
+================================ */
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 300px;
+}
+
+/* Beat bars visual (replaces progress range) */
+.beat-bars {
+  display: flex;
+  gap: 8px;
+  align-items: end;
+  width: 220px;
+  height: 28px;
+}
+.beat-bars span {
+  width: 8px;
+  height: 8px;
+  background: #1DB954;
+  border-radius: 4px;
+  display: inline-block;
+  transition: height 160ms linear, opacity 160ms linear;
+}
+
+/* mood-specific beat colors */
+body.happy .beat-bars span { background: #1DB954; }
+body.sad .beat-bars span { background: #4e73df; }
+body.study .beat-bars span { background: #2C5364; }
+body.workout .beat-bars span { background: #ff416c; }
+body.romantic .beat-bars span { background: #ff1744; }
+body.chill .beat-bars span { background: #00bcd4; }
+body.party .beat-bars span { background: #9c27b0; }
+body.rainy .beat-bars span { background: #455a64; }
+body.latenight .beat-bars span { background: #1a1a2e; }
+body.motivation .beat-bars span { background: #ff6f00; }
+body.angry .beat-bars span { background: #d32f2f; }
+body.relax .beat-bars span { background: #4caf50; }
+body.roadtrip .beat-bars span { background: #ff9800; }
+body.lofi .beat-bars span { background: #b39ddb; }
+body.celebration .beat-bars span { background: #ffd54f; }
+body.heartbreak .beat-bars span { background: #e91e63; }
+body.dance .beat-bars span { background: #ff5722; }
+body.morning .beat-bars span { background: #81c784; }
+body.rock .beat-bars span { background: #424242; }
+
+
+
+/* ===============================
+   MODE TOGGLE
+================================ */
+.mode-toggle {
+  display: flex;
+  gap: 8px;
+}
+
+/* ===============================
+   VOLUME SYSTEM
+================================ */
+.volume-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+/* Hide slider by default */
+.volume-slider {
+  width: 110px;
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: 45px;   /* appear above speaker */
+  background: rgba(0,0,0,0.8);
+  padding: 5px;
+  border-radius: 8px;
+  z-index: 3000;
+}
+
+/* show slider on hover for easy access */
+.volume-wrapper:hover .volume-slider,
+.volume-wrapper.open .volume-slider {
+  display: block;
+}
+
+/* ===============================
+   VIDEO POSITION FIX
+================================ */
+.media-wrapper {
+  position: fixed;
+  right: 70px;   /* push left from scrollbar */
+  bottom: 130px;
+  z-index: 1000;
+}
+
+.media-wrapper video {
+  width: 360px;
+  max-width: 35vw;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+.media-wrapper {
+  transition: transform 0.3s ease;
+}
+
+.media-wrapper:hover {
+  /* removed scale transform to prevent creating new stacking context
+     which can make fixed-positioned children jump when hovered. */
+  box-shadow: 0 12px 50px rgba(0,0,0,0.35);
+}
+/* ===============================
+   THEATER MODE
+================================ */
+.theater-mode video {
+  width: 100vw !important;
+  height: 60vh !important;
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  z-index: 9999;
+  border-radius: 12px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.7);
+}
+#youtubePlayer {
+  width: 400px;
+  max-width: calc(100% - 80px); /* never overflow viewport */
+  height: 250px;
+  display: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(0,0,0,0.6);
+  position: fixed;
+  right: 20px;
+  bottom: 120px;
+  z-index: 99999;
+}
+
+/* Ensure the YouTube iframe fills the container and is visible */
+#youtubePlayer iframe {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  border: 0;
+}
+
+.media-wrapper {
+  position: fixed;
+  right: 20px;
+  bottom: 120px;
+  z-index: 999;
+}
+
+/* ===============================
+   NAVBAR
+================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  cursor: default;
+  user-select: none;
+}
+
+.navbar-brand .brand-text {
+  font-family: 'Righteous', cursive;
+  font-size: 1.45rem;
+  background: linear-gradient(135deg, #1DB954, #1ed760, #a0f0c0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Login button in navbar */
+.nav-login-btn {
+  display: inline-block;
+  padding: 8px 26px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #1DB954, #1ed760);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nav-login-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 16px rgba(29, 185, 84, 0.45);
+}
+
+/* User area in navbar (when logged in) */
+.nav-user-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-user-email {
+  font-size: 0.85rem;
+  color: #ccc;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-logout-btn {
+  padding: 7px 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #fff;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.nav-logout-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #1DB954;
+}
+
+/* ===============================
+   PROFILE AVATAR & DROPDOWN
+================================ */
+.profile-menu-wrapper {
+  position: relative;
+}
+
+.profile-avatar-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  padding: 0;
+  color: white;
+}
+
+.profile-avatar-btn:hover {
+  border-color: #1DB954;
+  background: rgba(29, 185, 84, 0.15);
+  transform: scale(1.08);
+}
+
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 230px;
+  background: rgba(24, 24, 24, 0.97);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  overflow: hidden;
+  z-index: 6000;
+  animation: dropdownSlide 0.2s ease;
+}
+
+.profile-dropdown.show {
+  display: block;
+}
+
+@keyframes dropdownSlide {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.profile-dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.profile-dropdown-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(29, 185, 84, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile-dropdown-email {
+  font-size: 0.82rem;
+  color: #ccc;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-dropdown-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 0 12px;
+}
+
+.profile-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  color: #e0e0e0;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: left;
+}
+
+.profile-dropdown-item:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.profile-dropdown-item .dropdown-arrow {
+  margin-left: auto;
+  transition: transform 0.2s;
+}
+
+.profile-dropdown-item .dropdown-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+.settings-submenu {
+  display: none;
+  padding-left: 16px;
+}
+
+.settings-submenu.show {
+  display: block;
+}
+
+.logout-item:hover {
+  background: rgba(255, 77, 77, 0.15);
+  color: #ff4d4d;
+}
+
+.logout-item:hover svg {
+  stroke: #ff4d4d;
+}
+
+/* ===============================
+   SAVE SONG BUTTON
+================================ */
+.save-song-btn {
+  position: relative;
+  transition: 0.3s;
+}
+
+.save-song-btn.saved svg {
+  fill: #1DB954;
+  stroke: #1DB954;
+}
+
+.save-song-btn.saved::after {
+  content: 'Saved!';
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1DB954;
+  color: black;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  animation: savedToast 1.5s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes savedToast {
+  0% { opacity: 0; transform: translateX(-50%) translateY(4px); }
+  20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ===============================
+   SAVED MUSIC OVERLAY
+================================ */
+.saved-music-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  z-index: 7000;
+  justify-content: center;
+  align-items: center;
+}
+
+.saved-music-overlay.show {
+  display: flex;
+}
+
+.saved-music-modal {
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 550px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 24px;
+  box-shadow: 0 16px 60px rgba(0,0,0,0.7);
+}
+
+.saved-music-modal h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.3rem;
+  color: #1DB954;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.saved-music-modal h3 .close-saved {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.saved-music-modal h3 .close-saved:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+}
+
+.saved-song-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.saved-song-item:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.saved-song-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.saved-song-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.saved-song-title {
+  font-size: 0.88rem;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.saved-song-remove {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.saved-song-remove:hover {
+  color: #ff4d4d;
+  background: rgba(255,77,77,0.15);
+}
+
+.saved-empty-msg {
+  color: #888;
+  text-align: center;
+  padding: 30px 0;
+  font-size: 0.9rem;
+}
+
+/* ===============================
+   PROFILE OVERLAY
+================================ */
+.profile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  z-index: 7000;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-overlay.show {
+  display: flex;
+}
+
+.profile-modal {
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  padding: 32px;
+  box-shadow: 0 16px 60px rgba(0,0,0,0.7);
+  text-align: center;
+}
+
+.profile-modal-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(29, 185, 84, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.profile-modal h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.profile-modal .profile-email-text {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.profile-modal .close-profile {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: #ccc;
+  padding: 8px 24px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.2s;
+}
+
+.profile-modal .close-profile:hover {
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+}

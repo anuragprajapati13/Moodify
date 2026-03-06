@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Moodify DJ Signup</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- VIDEO BACKGROUND -->
+  <video autoplay muted loop playsinline id="bgVideo">
+    <source src="panda-dj.mp4" type="video/mp4">
+  </video>
+
+  <!-- DARK OVERLAY -->
+  <div class="overlay"></div>
+
+  <!-- SIGNUP CARD -->
+  <div class="signup-container" id="signupBox">
+    <img src="logo2.png" alt="Moodify logo" class="logo">
+
+    <h2>Join The Vibe</h2>
+
+    <form id="signupForm">
+      <div class="form-group">
+        <input type="text" name="fullname" placeholder="Full Name" required id="signupFullname">
+      </div>
+
+      <div class="form-group email-wrapper">
+        <input type="email" name="email" placeholder="Email" required id="signupEmail">
+        <span class="email-suffix">@gmail.com</span>
+      </div>
+
+      <div class="form-group">
+        <input type="tel" name="mobile" placeholder="Mobile Number (10 digits)" required
+               pattern="[0-9]{10}" maxlength="10" minlength="10" inputmode="numeric"
+               title="Please enter exactly 10 digit mobile number"
+               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+      </div>
+
+      <div class="form-group username-wrapper">
+        <input type="text" name="username" placeholder="Username" required id="signupUsername" autocomplete="off">
+        <div class="username-suggestions" id="usernameSuggestions"></div>
+      </div>
+
+      <div class="form-group password-wrapper">
+        <input type="password" name="password" placeholder="Password" required minlength="6" id="signupPassword">
+        <span class="password-toggle" onclick="togglePassword('signupPassword', this)" title="Show/Hide Password">&#128065;</span>
+        <span class="password-hint-icon" tabindex="0">&#9432;
+          <span class="password-hint-tooltip">
+            Password must contain:<br>
+            &#10004; Minimum 6 characters<br>
+            &#10004; At least 1 uppercase letter<br>
+            &#10004; At least 1 lowercase letter<br>
+            &#10004; At least 1 number<br>
+            &#10004; At least 1 special character (!@#$%^&*)
+          </span>
+        </span>
+      </div>
+
+      <div class="form-group password-wrapper">
+        <input type="password" name="confirmPassword" placeholder="Confirm Password" required minlength="6" id="signupConfirmPassword">
+        <span class="password-toggle" onclick="togglePassword('signupConfirmPassword', this)" title="Show/Hide Password">&#128065;</span>
+      </div>
+
+      <button type="submit" id="signupBtn">Join The Vibe 🎵</button>
+    </form>
+
+    <!-- Link back to login -->
+    <p class="login-link">Already have an account? <a href="index.html">Login</a></p>
+  </div>
+
+  <!-- audio elements removed: mp3 files are empty/placeholder -->
+
+  <script src="script.js"></script>
+</body>
+</html>

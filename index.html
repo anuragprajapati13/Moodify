@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Moodify Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="particles"></div>
+
+<!-- ===============================
+     NAVBAR
+================================== -->
+<nav class="navbar">
+  <div class="navbar-left">
+    <span class="navbar-brand">🎵 <span class="brand-text">MOODIFY</span></span>
+  </div>
+  <div class="navbar-right">
+    <!-- Shown when NOT logged in -->
+    <a id="navLoginBtn" href="Login/index.html" class="nav-login-btn">Login</a>
+    <!-- Shown when logged in -->
+    <div id="navUserArea" class="nav-user-area" style="display:none;">
+      <span id="navUserEmail" class="nav-user-email"></span>
+      <div class="profile-menu-wrapper">
+        <button id="profileBtn" class="profile-avatar-btn" title="Profile">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-dropdown-header">
+            <div class="profile-dropdown-avatar">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
+            </div>
+            <span class="profile-dropdown-email" id="profileDropdownEmail"></span>
+          </div>
+          <div class="profile-dropdown-divider"></div>
+          <button class="profile-dropdown-item" onclick="openProfile()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
+            Profile
+          </button>
+          <button class="profile-dropdown-item" onclick="openSavedMusic()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            Saved Music
+          </button>
+          <button class="profile-dropdown-item" onclick="toggleSettingsSubmenu()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+            <svg class="dropdown-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="settings-submenu" id="settingsSubmenu">
+            <button class="profile-dropdown-item logout-item" onclick="logoutUser()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ===============================
+       SIDEBAR
+  ================================== -->
+  <div class="sidebar">
+    <h1 class="logo-heading"><span class="sidebar-brand">🎧 <span class="brand-text">MOODIFY</span></span></h1>
+    <!-- always visible moods -->
+    <button onclick="setMood('happy')">😄 Happy</button>
+    <button onclick="setMood('sad')">😢 Sad</button>
+    <button onclick="setMood('workout')">💪 Workout</button>
+    <button onclick="setMood('study')">📚 Study</button>
+    <button onclick="setMood('romantic')">💖 Romantic</button>
+    <button onclick="setMood('chill')">😎 Chill</button>
+    <button onclick="setMood('party')">🔥 Party</button>
+
+    <!-- hidden moods container -->
+    <div id="moreMoods" style="display:none;">
+      <button onclick="setMood('rainy')">🌧️ Rainy Vibes</button>
+      <button onclick="setMood('latenight')">🌙 Late Night</button>
+      <button onclick="setMood('motivation')">✨ Motivation</button>
+      <button onclick="setMood('angry')">😡 Angry</button>
+      <button onclick="setMood('relax')">🧘 Relax</button>
+      <button onclick="setMood('roadtrip')">🚗 Road Trip</button>
+      <button onclick="setMood('lofi')">🎧 Lo-Fi</button>
+      <button onclick="setMood('celebration')">🎉 Celebration</button>
+      <button onclick="setMood('heartbreak')">💔 Heartbreak</button>
+      <button onclick="setMood('dance')">🕺 Dance</button>
+      <button onclick="setMood('morning')">🌅 Morning Fresh</button>
+      <button onclick="setMood('rock')">🎸 Rock Mode</button>
+    </div>
+
+    <!-- toggle control -->
+    <button id="toggleMoreBtn" onclick="toggleMore()">See more</button>
+  </div>
+
+  <!-- ===============================
+       MAIN CONTENT
+  ================================== -->
+  <div class="main">
+    <div class="banner glass">
+      <h2 id="moodTitle">Select Your Mood</h2>
+      <input type="text" id="search" placeholder="Search songs..." />
+    </div>
+
+    <div class="grid" id="songGrid"></div>
+  </div>
+
+</div>
+
+<!-- ===============================
+     BOTTOM PLAYER
+================================ -->
+<div class="player glass">
+
+  <!-- LEFT -->
+  <div class="left">
+    <h4 id="songName">No Song Playing</h4>
+    <button id="likeBtn" class="control-btn" title="Like Song">❤️</button>
+  </div>
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <div class="controls">
+      <button class="control-btn" onclick="prevSong()" title="Previous">⏮</button>
+      <button id="shuffleBtn" class="control-btn" onclick="shuffleSong()" title="Shuffle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg></button>
+      <button id="playPause" class="control-btn play-btn" title="Play / Pause">▶</button>
+      <button class="control-btn" onclick="nextSong()" title="Next">⏭</button>
+      <button id="repeatBtn" class="control-btn" onclick="toggleRepeat()" title="Repeat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
+    </div>
+
+    <div class="timeline">
+      <span id="currentTime" class="time-label">0:00</span>
+      <div class="timeline-bar" id="timelineBar">
+        <div class="timeline-progress" id="timelineProgress"></div>
+        <div class="timeline-thumb" id="timelineThumb"></div>
+      </div>
+      <span id="totalTime" class="time-label">0:00</span>
+    </div>
+
+    <div class="progress-container">
+      <div id="beatBars" class="beat-bars" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+
+    <div class="mode-toggle">
+      <button id="audioModeBtn" class="control-btn active-mode" title="Audio Mode">🎵</button>
+      <button id="videoModeBtn" class="control-btn" title="Video Mode">🎬</button>
+    </div>
+
+    <div class="volume-wrapper">
+      <button id="speakerBtn" class="control-btn" title="Volume">🔊</button>
+      <input type="range" id="volume" class="volume-slider" min="0" max="1" step="0.01">
+    </div>
+
+    <button id="saveSongBtn" class="control-btn save-song-btn" title="Save Song">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+    </button>
+
+  </div>
+
+  <!-- MEDIA WRAPPER -->
+  <div class="media-wrapper">
+    <div id="youtubePlayer"></div>
+  </div>
+
+</div>
+
+<!-- IMPORTANT: Load YouTube API BEFORE script.js -->
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+
+<!-- SAVED MUSIC OVERLAY -->
+<div class="saved-music-overlay" id="savedMusicOverlay">
+  <div class="saved-music-modal">
+    <h3>
+      <span>🎵 Saved Music</span>
+      <button class="close-saved" onclick="closeSavedMusic()">&times;</button>
+    </h3>
+    <div id="savedMusicList"></div>
+  </div>
+</div>
+
+<!-- PROFILE OVERLAY -->
+<div class="profile-overlay" id="profileOverlay">
+  <div class="profile-modal">
+    <div class="profile-modal-avatar">
+      <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
+    </div>
+    <h3 id="profileModalName">User</h3>
+    <p class="profile-email-text" id="profileModalEmail">user@email.com</p>
+    <button class="close-profile" onclick="closeProfile()">Close</button>
+  </div>
+</div>
+
+</body>
+</html>
