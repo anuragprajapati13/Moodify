@@ -901,8 +901,12 @@ async function saveAvatar() {
     user.avatar = { ...avatarState };
     localStorage.setItem('moodify_user', JSON.stringify(user));
 
-    statusEl.textContent = '\u2713 Avatar saved successfully!';
+    statusEl.textContent = '\u2713 Avatar saved! Redirecting...';
     statusEl.className = 'save-status success';
+
+    // Redirect back to main page so avatar shows in profile
+    setTimeout(() => { window.location.href = '../index.html'; }, 1200);
+    return;
   } catch (err) {
     console.error('Save avatar error:', err);
     statusEl.textContent = 'Network error \u2013 make sure the server is running (node server.js).';
