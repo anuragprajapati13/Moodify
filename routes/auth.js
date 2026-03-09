@@ -77,7 +77,7 @@ router.post('/login', async (req, res) => {
     res.json({
       message: 'Login successful',
       token,
-      user: { id: user._id, email: user.email, mobile: user.mobile },
+      user: { id: user._id, email: user.email, mobile: user.mobile, avatar: user.avatar || null },
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -97,9 +97,50 @@ router.get('/profile', authenticateToken, async (req, res) => {
       id: user._id,
       email: user.email,
       mobile: user.mobile,
+      avatar: user.avatar || null,
       createdAt: user.createdAt,
     },
   });
+});
+
+// ========================
+// SAVE AVATAR
+// ========================
+router.post('/avatar', authenticateToken, async (req, res) => {
+  try {
+    const { avatar } = req.body;
+    if (!avatar || typeof avatar !== 'object') {
+      return res.status(400).json({ message: 'Invalid avatar data' });
+    }
+
+    const allowedKeys = ['face', 'skin', 'hair', 'hairColor', 'eyes', 'eyeColor', 'eyebrows', 'mouth', 'facialHair', 'glasses', 'headphones', 'accessories', 'bg'];
+    const sanitized = {};
+    for (const key of allowedKeys) {
+      if (typeof avatar[key] === 'string' && avatar[key].length < 30) {
+        sanitized[key] = avatar[key];
+      }
+    }
+
+    await User.updateOne({ email: req.user.email }, { $set: { avatar: sanitized } });
+    res.json({ message: 'Avatar saved successfully', avatar: sanitized });
+  } catch (error) {
+    console.error('Save avatar error:', error);
+    res.status(500).json({ message: 'Error saving avatar', error: error.message });
+  }
+});
+
+// ========================
+// GET AVATAR
+// ========================
+router.get('/avatar', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.user.email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ avatar: user.avatar || null });
+  } catch (error) {
+    console.error('Get avatar error:', error);
+    res.status(500).json({ message: 'Error loading avatar', error: error.message });
+  }
 });
 
 // ========================

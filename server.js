@@ -31,6 +31,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 // Serve the Login pages
 app.use('/Login', express.static(path.join(__dirname, 'Login')));
+// Serve the Avatar builder
+app.use('/avatar', express.static(path.join(__dirname, 'avatar')));
 
 // ========================
 // API ROUTES
