@@ -766,6 +766,200 @@ body.rock .beat-bars span { background: #424242; }
 }
 
 /* ===============================
+   AVATAR LETTER STYLES
+================================ */
+.avatar-letter {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  line-height: 1;
+  user-select: none;
+}
+
+.avatar-letter-lg {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1DB954;
+  text-transform: uppercase;
+  line-height: 1;
+  user-select: none;
+}
+
+.avatar-letter-xl {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1DB954;
+  text-transform: uppercase;
+  line-height: 1;
+  user-select: none;
+}
+
+.profile-avatar-btn {
+  background: linear-gradient(135deg, #1DB954, #1ed760) !important;
+  border-color: #1DB954 !important;
+}
+
+.profile-dropdown-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.profile-dropdown-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===============================
+   NOTIFICATION BELL
+================================ */
+.notification-wrapper {
+  position: relative;
+}
+
+.notif-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  padding: 0;
+  color: white;
+  position: relative;
+}
+
+.notif-btn:hover {
+  border-color: #1DB954;
+  background: rgba(29, 185, 84, 0.15);
+  transform: scale(1.08);
+}
+
+.notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #e53935;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(0,0,0,0.7);
+}
+
+.notif-badge:empty,
+.notif-badge[data-count="0"] {
+  display: none;
+}
+
+.notif-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 320px;
+  max-height: 400px;
+  background: rgba(24, 24, 24, 0.97);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  overflow: hidden;
+  z-index: 6000;
+  animation: dropdownSlide 0.2s ease;
+}
+
+.notif-dropdown.show {
+  display: block;
+}
+
+.notif-dropdown-header {
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.notif-dropdown-list {
+  overflow-y: auto;
+  max-height: 340px;
+}
+
+.notif-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.notif-item:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+.notif-item-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #282828;
+}
+
+.notif-item-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.notif-item-title {
+  font-size: 0.82rem;
+  color: #fff;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notif-item-sub {
+  font-size: 0.72rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+.notif-item-new {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1DB954;
+  flex-shrink: 0;
+}
+
+.notif-empty {
+  padding: 30px 16px;
+  text-align: center;
+  color: #888;
+  font-size: 0.85rem;
+}
+
+/* ===============================
    SAVE SONG BUTTON
 ================================ */
 .save-song-btn {

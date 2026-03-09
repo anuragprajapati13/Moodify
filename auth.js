@@ -9,7 +9,6 @@
 
   const navLoginBtn = document.getElementById('navLoginBtn');
   const navUserArea = document.getElementById('navUserArea');
-  const navUserEmail = document.getElementById('navUserEmail');
 
   /* ===============================
      NOT LOGGED IN
@@ -46,10 +45,12 @@
     navUserArea.style.display = "flex";
 
     const user = JSON.parse(localStorage.getItem("moodify_user") || "{}");
+    const userName = user.name || (user.email ? user.email.split('@')[0] : 'User');
+    const firstLetter = userName.charAt(0).toUpperCase();
 
-    if (navUserEmail) {
-      navUserEmail.textContent = user.email || "User";
-    }
+    // Set avatar letters
+    const avatarLetter = document.getElementById('avatarLetter');
+    if (avatarLetter) avatarLetter.textContent = firstLetter;
 
   }
 
@@ -81,11 +82,17 @@ function logoutUser() {
 
   if (!profileBtn || !profileDropdown) return;
 
-  // Set email in dropdown header
+  // Set name & email in dropdown header
   const user = JSON.parse(localStorage.getItem('moodify_user') || '{}');
-  if (profileDropdownEmail) {
-    profileDropdownEmail.textContent = user.email || 'User';
-  }
+  const userName = user.name || (user.email ? user.email.split('@')[0] : 'User');
+  const firstLetter = userName.charAt(0).toUpperCase();
+
+  const profileDropdownName = document.getElementById('profileDropdownName');
+  if (profileDropdownName) profileDropdownName.textContent = userName;
+  if (profileDropdownEmail) profileDropdownEmail.textContent = user.email || '';
+
+  const dropdownAvatarLetter = document.getElementById('dropdownAvatarLetter');
+  if (dropdownAvatarLetter) dropdownAvatarLetter.textContent = firstLetter;
 
   // Toggle dropdown on click
   profileBtn.addEventListener('click', (e) => {
@@ -118,10 +125,13 @@ function openProfile() {
   const overlay = document.getElementById('profileOverlay');
   const nameEl = document.getElementById('profileModalName');
   const emailEl = document.getElementById('profileModalEmail');
+  const avatarEl = document.getElementById('profileModalAvatarLetter');
   const user = JSON.parse(localStorage.getItem('moodify_user') || '{}');
+  const userName = user.name || (user.email ? user.email.split('@')[0] : 'User');
 
-  if (nameEl) nameEl.textContent = user.email ? user.email.split('@')[0] : 'User';
+  if (nameEl) nameEl.textContent = userName;
   if (emailEl) emailEl.textContent = user.email || '';
+  if (avatarEl) avatarEl.textContent = userName.charAt(0).toUpperCase();
   if (overlay) overlay.classList.add('show');
 
   // close profile dropdown
@@ -274,3 +284,96 @@ document.addEventListener('DOMContentLoaded', () => {
     saveBtn.addEventListener('click', toggleSaveSong);
   }
 });
+
+/* ===============================
+   NOTIFICATIONS – Latest Songs
+================================ */
+
+(function initNotifications() {
+  const notifBtn = document.getElementById('notifBtn');
+  const notifDropdown = document.getElementById('notifDropdown');
+  const notifBadge = document.getElementById('notifBadge');
+  const notifList = document.getElementById('notifList');
+
+  if (!notifBtn || !notifDropdown) return;
+
+  // Toggle dropdown
+  notifBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    notifDropdown.classList.toggle('show');
+    // Close profile dropdown if open
+    const pdd = document.getElementById('profileDropdown');
+    if (pdd) pdd.classList.remove('show');
+    // Mark as read
+    if (notifBadge) {
+      notifBadge.textContent = '0';
+      notifBadge.setAttribute('data-count', '0');
+    }
+  });
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (!notifDropdown.contains(e.target) && e.target !== notifBtn) {
+      notifDropdown.classList.remove('show');
+    }
+  });
+
+  // Fetch latest songs for notifications
+  fetchLatestSongsNotifications();
+
+  function fetchLatestSongsNotifications() {
+    const API_KEY = typeof YT_API_KEY !== 'undefined' ? YT_API_KEY : 'AIzaSyBBo042Lu_K2IgVVAe-74W5BW2VBY--7J8';
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoCategoryId=10&order=date&maxResults=8&q=latest+trending+songs+2026&key=${encodeURIComponent(API_KEY)}`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        if (!data.items || data.items.length === 0) {
+          notifList.innerHTML = '<div class="notif-empty">No new songs right now</div>';
+          return;
+        }
+
+        const count = data.items.length;
+        if (notifBadge) {
+          notifBadge.textContent = count;
+          notifBadge.setAttribute('data-count', count);
+        }
+
+        notifList.innerHTML = data.items.map(item => {
+          const title = item.snippet.title;
+          const thumb = item.snippet.thumbnails.default.url;
+          const videoId = item.id.videoId;
+          const channel = item.snippet.channelTitle;
+          return `
+            <div class="notif-item" onclick="playNotifSong('${videoId}', \`${title.replace(/`/g, "'")}\`)">
+              <img class="notif-item-thumb" src="${thumb}" alt="">
+              <div class="notif-item-info">
+                <div class="notif-item-title">${title}</div>
+                <div class="notif-item-sub">${channel}</div>
+              </div>
+              <div class="notif-item-new"></div>
+            </div>
+          `;
+        }).join('');
+      })
+      .catch(() => {
+        notifList.innerHTML = '<div class="notif-empty">Could not load notifications</div>';
+      });
+  }
+})();
+
+function playNotifSong(videoId, title) {
+  // Close notification dropdown
+  const dd = document.getElementById('notifDropdown');
+  if (dd) dd.classList.remove('show');
+
+  if (typeof playSong === 'function' && typeof playlist !== 'undefined') {
+    playlist = [{ videoId: videoId, title: title }];
+    currentIndex = 0;
+    playSong(0);
+  } else if (typeof ytPlayer !== 'undefined' && ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
+    ytPlayer.loadVideoById(videoId);
+    const songNameEl = document.getElementById('songName');
+    if (songNameEl) songNameEl.textContent = title;
+  }
+}
