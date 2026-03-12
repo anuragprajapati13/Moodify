@@ -119,7 +119,10 @@
   <div class="main">
     <div class="banner glass">
       <h2 id="moodTitle">Select Your Mood</h2>
-      <input type="text" id="search" placeholder="Search songs..." />
+      <div class="search-box">
+        <input type="text" id="search" placeholder="Search songs..." autocomplete="off" />
+        <div id="searchSuggestions" class="search-suggestions"></div>
+      </div>
     </div>
 
     <div class="grid" id="songGrid"></div>
