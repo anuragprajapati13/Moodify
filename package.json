@@ -8,7 +8,11 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": ["mood", "music", "player"],
+  "keywords": [
+    "mood",
+    "music",
+    "player"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -18,7 +22,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^9.2.4",
+    "mongoose": "^9.4.1",
     "nodemailer": "^6.9.6"
   },
   "devDependencies": {

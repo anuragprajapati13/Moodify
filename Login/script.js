@@ -1,7 +1,21 @@
 // ========================
 // VIDEO PLAY FIX
 // ========================
-const API_BASE = 'http://localhost:5000';
+const API_BASE = resolveApiBase();
+
+function resolveApiBase() {
+    const explicitBase = window.__MOODIFY_API_BASE__ || document.querySelector('meta[name="api-base"]')?.content;
+
+    if (explicitBase) {
+        return explicitBase.replace(/\/$/, '');
+    }
+
+    if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+        return window.location.origin;
+    }
+
+    return 'http://localhost:5000';
+}
 const bgVideo = document.getElementById("bgVideo");
 document.addEventListener("click", () => {
     if (bgVideo.paused) bgVideo.play();

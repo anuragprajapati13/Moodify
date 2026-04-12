@@ -6,12 +6,14 @@
 const AUTH_API_BASE = resolveApiBase();
 
 function resolveApiBase() {
-  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
-    if (window.location.port === '5000') {
-      return window.location.origin;
-    }
+  const explicitBase = window.__MOODIFY_API_BASE__ || document.querySelector('meta[name="api-base"]')?.content;
 
-    return `${window.location.protocol}//${window.location.hostname}:5000`;
+  if (explicitBase) {
+    return explicitBase.replace(/\/$/, '');
+  }
+
+  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+    return window.location.origin;
   }
 
   return 'http://localhost:5000';
