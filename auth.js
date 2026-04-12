@@ -405,10 +405,15 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchLatestSongsNotifications();
 
   function fetchLatestSongsNotifications() {
-    const API_KEY = typeof YT_API_KEY !== 'undefined' ? YT_API_KEY : 'AIzaSyBBo042Lu_K2IgVVAe-74W5BW2VBY--7J8';
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoCategoryId=10&order=date&maxResults=8&q=latest+trending+songs+2026&key=${encodeURIComponent(API_KEY)}`;
-
-    fetch(url)
+    // Use backend endpoint instead of direct YouTube API call
+    fetch('/api/youtube/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        q: 'latest trending songs 2026',
+        maxResults: 8
+      })
+    })
       .then(res => res.json())
       .then(data => {
         if (!data.items || data.items.length === 0) {

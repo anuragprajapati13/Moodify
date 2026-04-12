@@ -2,7 +2,7 @@
    CONFIG
 ================================ */
 
-const YT_API_KEY = "AIzaSyBBo042Lu_K2IgVVAe-74W5BW2VBY--7J8";
+// YouTube API key is now handled by backend - no longer exposed in frontend
 console.log("Script.js loaded ✅");
 
 /* ===============================
@@ -694,7 +694,7 @@ if (beatBars) {
    YOUTUBE SEARCH
 ================================ */
 
-// fetch from YouTube search, accumulating multiple pages until we reach the target count
+// fetch from backend YouTube proxy endpoint
 async function searchYouTube(query) {
   const rawQuery = (query || "").trim();
   if (!rawQuery) return;
@@ -706,39 +706,34 @@ async function searchYouTube(query) {
   const seenVideoIds = new Set();
   let nextPageToken = null;
   let attempts = 0;
-  let data = null; // declare at function scope to avoid undefined reference
+  let data = null;
 
   songGrid.innerHTML = `<p class="empty">Loading songs for "${escapeHtml(rawQuery)}"...</p>`;
 
   try {
     do {
-      const url = new URL('https://www.googleapis.com/youtube/v3/search');
-      url.searchParams.set('part', 'snippet');
-      url.searchParams.set('type', 'video');
-      url.searchParams.set('videoEmbeddable', 'true');
-      url.searchParams.set('videoCategoryId', '10');
-      url.searchParams.set('order', 'relevance');
-      url.searchParams.set('maxResults', String(SEARCH_PAGE_SIZE));
-      url.searchParams.set('q', normalizedQuery);
-      url.searchParams.set('key', YT_API_KEY);
-      if (nextPageToken) url.searchParams.set('pageToken', nextPageToken);
+      const resp = await fetch('/api/youtube/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          q: normalizedQuery,
+          maxResults: SEARCH_PAGE_SIZE,
+          pageToken: nextPageToken || ''
+        })
+      });
 
-      const resp = await fetch(url);
       if (!resp.ok) {
         const text = await resp.text();
         let body = text;
         try { body = JSON.parse(text); } catch(e) {}
         console.error('YouTube API error:', resp.status, resp.statusText, body);
-        console.error('YouTube request URL:', url.toString());
 
-        // present a clearer message in the UI for common cases and include error details for debugging
         if (resp.status === 403 || (body && body.error && body.error.code === 403)) {
           const msg = (body && body.error && body.error.message) || resp.statusText || 'Access denied';
-          songGrid.innerHTML = `<p class="empty">YouTube API error (403): ${msg}. Check API key, quota, and referrer restrictions.</p>`;
+          songGrid.innerHTML = `<p class="empty">YouTube API error (403): ${msg}. Check API key and quota.</p>`;
         } else if (resp.status === 400) {
           const msg = (body && body.error && body.error.message) || resp.statusText;
-          const details = (body && body.error && body.error.errors) ? JSON.stringify(body.error.errors) : '';
-          songGrid.innerHTML = `<p class="empty">YouTube API error (400): ${msg}. ${details ? 'Details: ' + details : ''}</p>`;
+          songGrid.innerHTML = `<p class="empty">YouTube API error (400): ${msg}.</p>`;
         } else {
           songGrid.innerHTML = `<p class="empty">YouTube API error: ${resp.status} ${resp.statusText}. See console for details.</p>`;
         }
@@ -759,7 +754,6 @@ async function searchYouTube(query) {
       attempts++;
     } while (allItems.length < SEARCH_RESULT_TARGET && nextPageToken && attempts < SEARCH_MAX_PAGES);
 
-    // if YouTube returned nothing, log and update UI
     if (allItems.length === 0) {
       console.warn('searchYouTube: received zero items', data);
       songGrid.innerHTML = `<p class="empty">No songs found for "${escapeHtml(rawQuery)}"</p>`;
@@ -884,23 +878,32 @@ function shuffleArray(arr) {
   }
 }
 
-// fetch durations for a list of video IDs using YouTube Videos API
+// fetch durations for a list of video IDs using backend YouTube proxy
 async function fetchVideoDurations(ids) {
   if (!ids || ids.length === 0) return {};
 
   const map = {};
 
   for (let index = 0; index < ids.length; index += 50) {
-    const chunk = ids.slice(index, index + 50).join(",");
-    const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${chunk}&key=${YT_API_KEY}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    if (!data.items) continue;
-    data.items.forEach(item => {
-      const id = item.id;
-      const iso = item.contentDetails && item.contentDetails.duration;
-      map[id] = parseISO8601Duration(iso);
-    });
+    const chunk = ids.slice(index, index + 50);
+    try {
+      const res = await fetch('/api/youtube/video-details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ videoIds: chunk })
+      });
+      
+      const data = await res.json();
+      if (!data.items) continue;
+      
+      data.items.forEach(item => {
+        const id = item.id;
+        const iso = item.contentDetails && item.contentDetails.duration;
+        map[id] = parseISO8601Duration(iso);
+      });
+    } catch (err) {
+      console.error('Error fetching video durations:', err);
+    }
   }
 
   return map;

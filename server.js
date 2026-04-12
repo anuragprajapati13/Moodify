@@ -14,6 +14,7 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 
 import connectDB from './db/connection.js';
 import authRoutes from './routes/auth.js';
+import youtubeRoutes from './routes/youtube.js';
 import User from './models/User.js';
 
 // Initialize Express app
@@ -36,6 +37,7 @@ app.use('/Login', express.static(path.join(__dirname, 'Login')));
 // API ROUTES
 // ========================
 app.use('/api/auth', authRoutes);
+app.use('/api/youtube', youtubeRoutes);
 
 // Direct /api/signup route for frontend compatibility
 app.post('/api/signup', async (req, res) => {
