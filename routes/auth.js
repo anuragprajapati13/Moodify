@@ -4,7 +4,15 @@ import bcryptjs from 'bcryptjs';
 import User from '../models/User.js';
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'moodify_jwt_secret_2026';
+
+// Helper function to get JWT_SECRET (check at runtime, not load time)
+function getJWTSecret() {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error('❌ CRITICAL: JWT_SECRET is not defined in environment variables');
+  }
+  return secret;
+}
 
 // ========================
 // SIGNUP
@@ -32,7 +40,7 @@ router.post('/signup', async (req, res) => {
 
     const token = jwt.sign(
       { userId: user._id, email: user.email },
-      JWT_SECRET,
+      getJWTSecret(),
       { expiresIn: '7d' }
     );
 
@@ -70,7 +78,7 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign(
       { userId: user._id, email: user.email },
-      JWT_SECRET,
+      getJWTSecret(),
       { expiresIn: '7d' }
     );
 
@@ -137,7 +145,7 @@ function authenticateToken(req, res, next) {
 
   if (!token) return res.status(401).json({ message: 'Access token required' });
 
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+  jwt.verify(token, getJWTSecret(), (err, decoded) => {
     if (err) return res.status(403).json({ message: 'Invalid or expired token' });
     req.user = decoded;
     next();

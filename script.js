@@ -2,7 +2,7 @@
    CONFIG
 ================================ */
 
-// YouTube API key is now handled by backend - no longer exposed in frontend
+// YouTube API key is securely stored on backend - frontend calls /api/youtube proxy endpoints
 console.log("Script.js loaded ✅");
 
 /* ===============================
@@ -694,7 +694,7 @@ if (beatBars) {
    YOUTUBE SEARCH
 ================================ */
 
-// fetch from backend YouTube proxy endpoint
+// Call backend proxy endpoint for YouTube search (secure - API key hidden)
 async function searchYouTube(query) {
   const rawQuery = (query || "").trim();
   if (!rawQuery) return;
@@ -706,13 +706,13 @@ async function searchYouTube(query) {
   const seenVideoIds = new Set();
   let nextPageToken = null;
   let attempts = 0;
-  let data = null;
 
   songGrid.innerHTML = `<p class="empty">Loading songs for "${escapeHtml(rawQuery)}"...</p>`;
 
   try {
     do {
-      const resp = await fetch('/api/youtube/search', {
+      // Call our backend proxy endpoint (API key is secure in backend .env)
+      const resp = await fetch('http://localhost:5000/api/youtube/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -723,28 +723,19 @@ async function searchYouTube(query) {
       });
 
       if (!resp.ok) {
-        const text = await resp.text();
-        let body = text;
-        try { body = JSON.parse(text); } catch(e) {}
-        console.error('YouTube API error:', resp.status, resp.statusText, body);
-
-        if (resp.status === 403 || (body && body.error && body.error.code === 403)) {
-          const msg = (body && body.error && body.error.message) || resp.statusText || 'Access denied';
-          songGrid.innerHTML = `<p class="empty">YouTube API error (403): ${msg}. Check API key and quota.</p>`;
-        } else if (resp.status === 400) {
-          const msg = (body && body.error && body.error.message) || resp.statusText;
-          songGrid.innerHTML = `<p class="empty">YouTube API error (400): ${msg}.</p>`;
-        } else {
-          songGrid.innerHTML = `<p class="empty">YouTube API error: ${resp.status} ${resp.statusText}. See console for details.</p>`;
-        }
+        const data = await resp.json().catch(() => ({}));
+        console.error('YouTube API error:', resp.status, data);
+        songGrid.innerHTML = `<p class="empty">YouTube API error: ${resp.status}. Please ensure backend is running on localhost:5000</p>`;
         return;
       }
 
-      data = await resp.json();
-      if (!data.items) break;
+      const data = await resp.json();
+      console.log('✅ YouTube search response received');
+
+      if (!data.items || data.items.length === 0) break;
 
       data.items.forEach(item => {
-        const videoId = item && item.id && item.id.videoId;
+        const videoId = item?.id?.videoId;
         if (!videoId || seenVideoIds.has(videoId)) return;
         seenVideoIds.add(videoId);
         allItems.push(item);
@@ -755,15 +746,15 @@ async function searchYouTube(query) {
     } while (allItems.length < SEARCH_RESULT_TARGET && nextPageToken && attempts < SEARCH_MAX_PAGES);
 
     if (allItems.length === 0) {
-      console.warn('searchYouTube: received zero items', data);
       songGrid.innerHTML = `<p class="empty">No songs found for "${escapeHtml(rawQuery)}"</p>`;
       return;
     }
 
+    console.log(`✅ Found ${allItems.length} videos`);
     displaySearchResults(allItems, rawQuery);
   } catch (err) {
-    console.error('searchYouTube error:', err);
-    songGrid.innerHTML = `<p class="empty">Error loading songs. Check console.</p>`;
+    console.error('❌ searchYouTube error:', err);
+    songGrid.innerHTML = `<p class="empty">Error: Backend server not running. Start with: npm start on port 5000</p>`;
   }
 }
 
@@ -887,12 +878,18 @@ async function fetchVideoDurations(ids) {
   for (let index = 0; index < ids.length; index += 50) {
     const chunk = ids.slice(index, index + 50);
     try {
-      const res = await fetch('/api/youtube/video-details', {
+      // Call backend proxy endpoint for video details (secure)
+      const res = await fetch('http://localhost:5000/api/youtube/video-details', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ videoIds: chunk })
       });
       
+      if (!res.ok) {
+        console.error('Error fetching video durations:', res.status);
+        continue;
+      }
+
       const data = await res.json();
       if (!data.items) continue;
       
@@ -901,8 +898,10 @@ async function fetchVideoDurations(ids) {
         const iso = item.contentDetails && item.contentDetails.duration;
         map[id] = parseISO8601Duration(iso);
       });
+      
+      console.log('✅ Got durations for', data.items.length, 'videos');
     } catch (err) {
-      console.error('Error fetching video durations:', err);
+      console.error('❌ Error fetching video durations:', err);
     }
   }
 

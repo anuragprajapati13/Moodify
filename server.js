@@ -61,7 +61,10 @@ app.post('/api/signup', async (req, res) => {
       password: hashedPassword,
     });
 
-    const JWT_SECRET = process.env.JWT_SECRET || 'moodify_jwt_secret_2026';
+    const JWT_SECRET = process.env.JWT_SECRET;
+    if (!JWT_SECRET) {
+      return res.status(500).json({ message: 'Server configuration error: JWT_SECRET not defined' });
+    }
     const token = jwt.sign({ userId: user._id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
 
     res.status(201).json({
